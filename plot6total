@@ -18,10 +18,9 @@ aggregate.motor.24510 <- with(NEI.motor.24510, aggregate(Emissions, by = list(ye
 NEI.motor.24510 <- NEI.motor[which(NEI.motor$fips == "24510"), ]
 NEI.motor.06037 <- NEI.motor[which(NEI.motor$fips == "06037"), ]
 
-aggregate.motor.24510 <- with(NEI.motor.24510, aggregate(Emissions, by = list(year), 
-                                                         sum))
+aggregate.motor.24510 <- with(NEI.motor.24510, aggregate(Emissions, by = list(year), sum)                                                         sum))
 aggregate.motor.24510$group <- rep("Baltimore County", length(aggregate.motor.24510[, 
-                                                                                    1])) #selectting baltimore data based on vehicle sources
+                                                                                1])) #selectting baltimore data based on vehicle sources
 
 
 aggregate.motor.06037 <- with(NEI.motor.06037, aggregate(Emissions, by = list(year), 
