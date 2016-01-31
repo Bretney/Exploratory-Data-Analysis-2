@@ -1,27 +1,19 @@
-library(plyr)
-library(ggplot2)
+setwd("~/exdata-data-NEI_data") #to set up working directory 
+library(plyr)#loading ggplot2 library
+library(ggplot2)#loading plyr library
 
-NEI <- readRDS("summarySCC_PM25.rds")
-SCC <- readRDS("Source_Classification_Code.rds")
+NEI <- readRDS("summarySCC_PM25.rds") #loading the datasets from machine
+SCC <- readRDS("Source_Classification_Code.rds") #sourcing the Classification Code
 
 
-SCC.motor <- grep("motor", SCC$Short.Name, ignore.case = TRUE)
-SCC.motor <- SCC[SCC.motor, ]
+SCC.motor <- grep("motor", SCC$Short.Name, ignore.case = TRUE) 
+SCC.motor <- SCC[SCC.motor, ] #getting motor vehicle SCC
 SCC.identifiers <- as.character(SCC.motor$SCC)
 NEI$SCC <- as.character(NEI$SCC)
 NEI.motor <- NEI[NEI$SCC %in% SCC.identifiers, ]
 NEI.motor.24510 <- NEI.motor[which(NEI.motor$fips == "24510"), ]
 aggregate.motor.24510 <- with(NEI.motor.24510, aggregate(Emissions, by = list(year), 
                                                          sum))
-
-
-SCC.motor <- grep("motor", SCC$Short.Name, ignore.case = TRUE)
-SCC.motor <- SCC[SCC.motor, ]
-SCC.identifiers <- as.character(SCC.motor$SCC)
-
-
-NEI$SCC <- as.character(NEI$SCC)
-NEI.motor <- NEI[NEI$SCC %in% SCC.identifiers, ]
 
 NEI.motor.24510 <- NEI.motor[which(NEI.motor$fips == "24510"), ]
 NEI.motor.06037 <- NEI.motor[which(NEI.motor$fips == "06037"), ]
@@ -29,19 +21,20 @@ NEI.motor.06037 <- NEI.motor[which(NEI.motor$fips == "06037"), ]
 aggregate.motor.24510 <- with(NEI.motor.24510, aggregate(Emissions, by = list(year), 
                                                          sum))
 aggregate.motor.24510$group <- rep("Baltimore County", length(aggregate.motor.24510[, 
-                                                                                    1]))
+                                                                                    1])) #selectting baltimore data based on vehicle sources
 
 
 aggregate.motor.06037 <- with(NEI.motor.06037, aggregate(Emissions, by = list(year), 
                                                          sum))
 aggregate.motor.06037$group <- rep("Los Angeles County", length(aggregate.motor.06037[, 
-                                                                                      1]))
+                                                                                      1]))# select LA County data based on vehicle sources
 
 aggregated.motor.zips <- rbind(aggregate.motor.06037, aggregate.motor.24510)
 aggregated.motor.zips$group <- as.factor(aggregated.motor.zips$group)
 
 colnames(aggregated.motor.zips) <- c("Year", "Emissions", "Group")
 
+#generatting the graph in the same directory as the source code 
 qplot(Year, Emissions, data = aggregated.motor.zips, group = Group, color = Group, 
       geom = c("point", "line"), ylab = expression("Total Emissions, PM"[2.5]), 
       xlab = "Year", main = "Comparison of Total Emissions by County")
