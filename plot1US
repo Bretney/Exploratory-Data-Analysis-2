@@ -1,0 +1,11 @@
+setwd("~/exdata-data-NEI_data") #to set up working directory 
+
+NEI <- readRDS("summarySCC_PM25.rds") #loading the datasets from machine
+SCC <- readRDS("Source_Classification_Code.rds") #sourcing the Classification Code
+ 
+aggregate.data <- with(NEI, aggregate(Emissions, by = list(year), sum)) #aggregating total emissions for the year
+
+# Generate the graph in the same directory as the source code 
+plot(aggregate.data, type = "o", ylab = expression("Total Emissions, PM"[2.5]), 
+         +      xlab = "Year", main = "Total Emissions in the United States")
+polygon(aggregate.data, col = "green", border = "blue")
