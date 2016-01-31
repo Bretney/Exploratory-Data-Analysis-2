@@ -5,9 +5,9 @@ NEI <- readRDS("summarySCC_PM25.rds") #loading the datasets from machine
 SCC <- readRDS("Source_Classification_Code.rds") #sourcing the Classification Code
 
 SCC.motor <- grep("motor", SCC$Short.Name, ignore.case = TRUE)
-SCC.motor <- SCC[SCC.motor, ]
+SCC.motor <- SCC[SCC.motor, ] #getting motor SCC
 SCC.identifiers <- as.character(SCC.motor$SCC)
-NEI$SCC <- as.character(NEI$SCC)
+NEI$SCC <- as.character(NEI$SCC) #setting NEI.SCC
 NEI.motor <- NEI[NEI$SCC %in% SCC.identifiers, ]
 
 NEI.motor.24510 <- NEI.motor[which(NEI.motor$fips == "24510"), ]
